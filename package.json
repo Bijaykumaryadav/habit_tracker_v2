@@ -1,0 +1,26 @@
+{
+  "name": "habit_tracker_version2",
+  "version": "2.0.0",
+  "description": "updated version of the habit tracker",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npx nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bijaykumaryadav/habit_tracker_v2.git"
+  },
+  "author": "Bijay Kumar Yadav",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Bijaykumaryadav/habit_tracker_v2/issues"
+  },
+  "homepage": "https://github.com/Bijaykumaryadav/habit_tracker_v2#readme",
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "express-ejs-layouts": "^2.5.1",
+    "nodemon": "^3.1.0"
+  }
+}
