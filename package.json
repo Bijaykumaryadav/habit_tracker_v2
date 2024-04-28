@@ -18,9 +18,12 @@
   },
   "homepage": "https://github.com/Bijaykumaryadav/habit_tracker_v2#readme",
   "dependencies": {
+    "bcrypt": "^5.1.1",
+    "connect-mongo": "^5.1.0",
     "ejs": "^3.1.10",
     "express": "^4.19.2",
     "express-ejs-layouts": "^2.5.1",
+    "mongoose": "^8.3.2",
     "nodemon": "^3.1.0"
   }
 }
