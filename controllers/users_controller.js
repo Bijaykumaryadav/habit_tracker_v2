@@ -53,6 +53,8 @@ module.exports.userProfile = function (req, res) {
   });
 };
 
+
+
 //to signout
 module.exports.destroySession = function (req, res) {
   req.logout(function (err) {
