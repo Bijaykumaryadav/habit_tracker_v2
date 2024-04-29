@@ -1,3 +1,4 @@
+//controllers/users_controllers.js
 const User = require("../models/user");
 const mongoose = require("mongoose");
 
@@ -49,5 +50,17 @@ module.exports.createSession = function (req, res) {
 module.exports.userProfile = function (req, res) {
   return res.render("user_profile", {
     title: "User Profile",
+  });
+};
+
+//to signout
+module.exports.destroySession = function (req, res) {
+  req.logout(function (err) {
+    if (err) {
+      // req.flash("error", "Something Went Wrong!!");
+      console.log("Something went wrong!!", err);
+    }
+    // req.flash("success", "Logged Out Successfully!!");
+    return res.redirect("/");
   });
 };

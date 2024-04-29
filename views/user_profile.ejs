@@ -37,6 +37,9 @@
 
         <button type="submit" id="submit-btn">Track Habit</button>
       </form>
+      <% if(locals.user) {%>
+      <a href="/users/sign-out" id="btn">sign-out</a>
+      <%}%>
     </div>
   </div>
 </body>

@@ -54,19 +54,22 @@ passport.use(
   )
 );
 
-//check if the user is authenticated
+//Check Authentication Middleware:
+// The checkAuthentication middleware checks if the user is authenticated.
 passport.checkAuthentication = function (req, res, next) {
   if (req.isAuthenticated()) {
+    //passport property
     return next();
   } else {
     return res.redirect("/");
   }
 };
 
-//set the authenticated user
+// Set Authenticated User Middleware:
+// The setAuthenticatedUser middleware sets the authenticated user in the req.locals.user variable.
 passport.setAuthenticatedUser = function (req, res, next) {
   if (req.isAuthenticated()) {
-    req.locals.user = req.user;
+    res.locals.user = req.user;
   }
   next();
 };
