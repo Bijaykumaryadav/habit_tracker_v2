@@ -16,11 +16,16 @@ const passportLocal = require("./config/passport-local-strategy");
 //to set up the google authentication
 const googleStrategy = require("./config/passport-google-oauth-2-strategy");
 
+//set up flash
+const connectFlash = require("connect-flash");
+const customMware = require("./config/middleware");
+
 // to use ejs layouts
 app.use(layout);
 
 //to use cookie-parser and urlencoded
 app.use(express.urlencoded({ extended: true }));
+
 app.use(cookieParser());
 
 app.use(express.static("./assets"));
@@ -59,6 +64,10 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(passport.setAuthenticatedUser);
+
+//use connect flash to show notification
+app.use(connectFlash());
+app.use(customMware.setFlash);
 
 //to use routes
 app.use("/", require("./routes"));
