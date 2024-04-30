@@ -33,6 +33,7 @@ module.exports.create = async function (req, res) {
           email: req.body.email,
           password: req.body.password,
         });
+        console.log(newUser);
         userSignUpMailer.signUp(newUser);
         req.flash("success", "Account created Successfully!");
         return res.redirect("/");
@@ -69,10 +70,11 @@ module.exports.forgottenPasswordEmailCollect = async function (req, res) {
     const user = await User.findOne({ email: req.body.email });
     if (user) {
       const token = crypto.randomBytes(20).toString("hex");
+      console.log(token);
       user.token = token;
       console.log(user.email);
       user.save();
-      forgottenPasswordMailer.forgottenPassword(user.token, user);
+      forgottenPasswordMailer.forgottenPassword(user.email, user.token);
       req.flash("success", "Reset Email sent!");
       return res.redirect("/");
     } else {
@@ -87,7 +89,8 @@ module.exports.forgottenPasswordEmailCollect = async function (req, res) {
 // render the update password form
 module.exports.resetPasswordForm = async function (req, res) {
   try {
-    const user = await User.findOne({ token: req.params.id });
+    const user = await User.findOne({ token: req.params.token });
+    console.log(user);
     if (user) {
       return res.render("reset_password", {
         title: "Reset Password",
@@ -106,9 +109,10 @@ module.exports.resetPasswordForm = async function (req, res) {
 //to collect password from above form and finally update user password
 module.exports.updatePassword = async function (req, res) {
   try {
-    const user = await User.findById(req.body.user_id);
+    const user = await User.findById(req.body.userId);
     if (user) {
       user.password = req.body.password;
+      console.log(user.password);
       user.save();
       req.flash("success", "Password updated Successfully");
       return res.redirect("/");

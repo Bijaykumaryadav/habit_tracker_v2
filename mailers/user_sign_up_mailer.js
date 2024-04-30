@@ -3,7 +3,7 @@ const nodemailer = require("../config/nodemailer");
 module.exports.signUp = function (user) {
   let htmlString = nodemailer.renderTemplate(
     { user: user },
-    "/sign_up/sing_up_mailer.ejs"
+    "/sign_up/sign_up_mailer.ejs"
   );
   nodemailer.transporter.sendMail(
     {

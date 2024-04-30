@@ -1,26 +1,22 @@
-//mailers/forgotten_password_mailer.js
 const nodemailer = require("../config/nodemailer");
 
-module.exports.forgottenPassword = function (token, user) {
+module.exports.forgottenPassword = function (userEmail, token) {
   let htmlString = nodemailer.renderTemplate(
-    { token: token },
+    { userEmail: userEmail, token: token },
     "/password/forgotten_password.ejs"
   );
-  console.log(user);
-
   nodemailer.transporter.sendMail(
     {
       from: "ybijayyadav468@gmail.com",
-      to: user.email,
-      subject: "Reset Your password",
+      to: userEmail,
+      subject: "Reset your password",
       html: htmlString,
     },
     function (err, info) {
       if (err) {
-        console.log(`error in sending mail ${err}`);
-      } else {
-        console.log(`message sent ${info}`);
+        console.log("error in sending reset password link", err);
       }
+      console.log('Reset link sent!!',info);
     }
   );
 };

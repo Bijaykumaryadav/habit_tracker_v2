@@ -35,6 +35,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       enum: ["done", "not done", "none"],
     },
+    token: {
+      type: String,
+      default: "",
+    },
   },
   { timestamps: true }
 );
