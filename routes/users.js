@@ -29,6 +29,18 @@ router.get(
   usersController.userProfile
 );
 
+//to show form for forgotten password
+router.get("/forgotten-password", usersController.forgottenPassword);
+
+//to collect data from the above form
+router.post("/forgotten-password", usersController.forgottenPasswordEmailCollect);
+
+//to show form for updating password
+router.get("/reset-password/:token", usersController.resetPasswordForm);
+
+//to collect data from above form
+router.post("/reset-password", usersController.updatePassword);
+
 router.get("/sign-out", usersController.destroySession);
 
 module.exports = router;
