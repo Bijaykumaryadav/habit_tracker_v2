@@ -33,13 +33,22 @@ router.get(
 router.get("/forgotten-password", usersController.forgottenPassword);
 
 //to collect data from the above form
-router.post("/forgotten-password", usersController.forgottenPasswordEmailCollect);
+router.post(
+  "/forgotten-password",
+  usersController.forgottenPasswordEmailCollect
+);
 
 //to show form for updating password
 router.get("/reset-password/:token", usersController.resetPasswordForm);
 
 //to collect data from above form
 router.post("/reset-password", usersController.updatePassword);
+
+//to collect data from the user profile
+router.post("/track-habit", usersController.trackHabit);
+
+//to show the calender of the performance
+router.get("/calendar", usersController.showCalendar);
 
 router.get("/sign-out", usersController.destroySession);
 

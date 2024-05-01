@@ -1,5 +1,6 @@
 //controllers/users_controllers.js
 const User = require("../models/user");
+const CalendarEvent = require("../models/calendar_events");
 const mongoose = require("mongoose");
 const userSignUpMailer = require("../mailers/user_sign_up_mailer");
 const forgottenPasswordMailer = require("../mailers/forgotten_password_mailer");
@@ -127,14 +128,74 @@ module.exports.updatePassword = async function (req, res) {
   }
 };
 
-//to signout
+// to collect data from the user profile page of the user
+module.exports.trackHabit = async function (req, res) {
+    const user = res.locals.user;
+    user.diet = req.body.diet;
+    user.book = req.body.book;
+    user.podcast = req.body.podcast;
+    user.walk = req.body.walk;
+    user.skincare = req.body.skincare;
+    await user.save();
+
+    if (user.diet === 'done' && user.book === 'done' && user.podcast === 'done' && user.walk === 'done' && user.skincare === 'done') {
+        const date = new Date().toISOString().split('T')[0];
+        if (user.calendarEvent) {
+            console.log('alreday exists');
+            console.log(user.calendarEvent._id);
+            const calendarEvent = await CalendarEvent.findOne({ user: user._id });
+            console.log(calendarEvent.dates);
+            calendarEvent.dates.push({ date: date });
+            calendarEvent.save();
+        } else {
+            console.log('new');
+            let newCalendarEvent = new CalendarEvent({
+                user: user._id,
+                // dates:[{date:date},{date:'2023-06-01'}]
+                dates: [{ date: date }]
+            });
+            newCalendarEvent.save();
+            user.calendarEvent = newCalendarEvent.id;
+            await user.save();
+        }
+    }
+
+    req.flash('success', 'Habit for today Tracked Successfully!');
+    return res.redirect('/users/calendar');
+};
+
+// to show calendar
+module.exports.showCalendar = async function (req, res) {
+  try {
+    const user = res.locals.user;
+    if (user) {
+      const calendarEventId = user.calendarEvent._id;
+      const calendarEvent = await CalendarEvent.findById(calendarEventId);
+      console.log(calendarEvent);
+      const calendarEventDates = calendarEvent.dates.map((dateObj) => {
+        return { date: dateObj.date.toISOString().split("T")[0] };
+      });
+      console.log(calendarEventDates);
+
+      return res.render("calendar", {
+        // Render the 'calendar' view
+        title: "Calendar",
+        calendarEventDates: calendarEventDates,
+      });
+    }
+  } catch (error) {
+    console.error("Error fetching calendar events:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+//to signout the user
 module.exports.destroySession = function (req, res) {
   req.logout(function (err) {
     if (err) {
-      // req.flash("error", "Something Went Wrong!!");
+      req.flash("error", "Something Went Wrong!!");
       console.log("Something went wrong!!", err);
     }
-    // req.flash("success", "Logged Out Successfully!!");
+    req.flash("success", "Logged Out Successfully!!");
     return res.redirect("/");
   });
 };

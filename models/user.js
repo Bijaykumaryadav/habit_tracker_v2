@@ -35,6 +35,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       enum: ["done", "not done", "none"],
     },
+    calendarEvent: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "CalendarEvent",
+    },
     token: {
       type: String,
       default: "",
