@@ -55,6 +55,7 @@ module.exports.createSession = function (req, res) {
 module.exports.userProfile = function (req, res) {
   return res.render("user_profile", {
     title: "User Profile",
+    showHeaderAndFooter: true,
   });
 };
 
@@ -130,38 +131,44 @@ module.exports.updatePassword = async function (req, res) {
 
 // to collect data from the user profile page of the user
 module.exports.trackHabit = async function (req, res) {
-    const user = res.locals.user;
-    user.diet = req.body.diet;
-    user.book = req.body.book;
-    user.podcast = req.body.podcast;
-    user.walk = req.body.walk;
-    user.skincare = req.body.skincare;
-    await user.save();
+  const user = res.locals.user;
+  user.diet = req.body.diet;
+  user.book = req.body.book;
+  user.podcast = req.body.podcast;
+  user.walk = req.body.walk;
+  user.skincare = req.body.skincare;
+  await user.save();
 
-    if (user.diet === 'done' && user.book === 'done' && user.podcast === 'done' && user.walk === 'done' && user.skincare === 'done') {
-        const date = new Date().toISOString().split('T')[0];
-        if (user.calendarEvent) {
-            console.log('alreday exists');
-            console.log(user.calendarEvent._id);
-            const calendarEvent = await CalendarEvent.findOne({ user: user._id });
-            console.log(calendarEvent.dates);
-            calendarEvent.dates.push({ date: date });
-            calendarEvent.save();
-        } else {
-            console.log('new');
-            let newCalendarEvent = new CalendarEvent({
-                user: user._id,
-                // dates:[{date:date},{date:'2023-06-01'}]
-                dates: [{ date: date }]
-            });
-            newCalendarEvent.save();
-            user.calendarEvent = newCalendarEvent.id;
-            await user.save();
-        }
+  if (
+    user.diet === "done" &&
+    user.book === "done" &&
+    user.podcast === "done" &&
+    user.walk === "done" &&
+    user.skincare === "done"
+  ) {
+    const date = new Date().toISOString().split("T")[0];
+    if (user.calendarEvent) {
+      console.log("alreday exists");
+      console.log(user.calendarEvent._id);
+      const calendarEvent = await CalendarEvent.findOne({ user: user._id });
+      console.log(calendarEvent.dates);
+      calendarEvent.dates.push({ date: date });
+      calendarEvent.save();
+    } else {
+      console.log("new");
+      let newCalendarEvent = new CalendarEvent({
+        user: user._id,
+        // dates:[{date:date},{date:'2023-06-01'}]
+        dates: [{ date: date }],
+      });
+      newCalendarEvent.save();
+      user.calendarEvent = newCalendarEvent.id;
+      await user.save();
     }
+  }
 
-    req.flash('success', 'Habit for today Tracked Successfully!');
-    return res.redirect('/users/calendar');
+  req.flash("success", "Habit for today Tracked Successfully!");
+  return res.redirect("/users/calendar");
 };
 
 // to show calendar

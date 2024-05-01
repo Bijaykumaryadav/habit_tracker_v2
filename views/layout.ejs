@@ -16,7 +16,15 @@
   </head>
 
   <body>
-    <%-body%> <%-script%>
+    <%if(typeof showHeaderAndFooter !== 'undefined' && showHeaderAndFooter){%>
+    <%- include('_header'); %> 
+    <%}%>
+     <%-body%> 
+     <%if(typeof showHeaderAndFooter
+    !== 'undefined' && showHeaderAndFooter){%> 
+      <%- include('_footer'); %>
+       <%}%>
+    <%-script%>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"
       integrity="sha512-lOrm9FgT1LKOJRUXF3tp6QaMorJftUjowOWiDcG5GFZ/q7ukof19V0HKx/GWzXCdt9zYju3/KhBNdCLzK8b90Q=="
